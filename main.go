@@ -1,16 +1,3 @@
-//GOAL
-//edit this to accept multiple models v
-//add sound
-//automate to read all models in folder
-//add choose function
-//make GUI
-
-// This example streams the microphone thru Snowboy to listen for the hotword,
-// by using the PortAudio interface.
-//
-// HOW TO USE:
-// 	go run examples/Go/listen/main.go [path to snowboy resource file] [path to snowboy hotword file]
-//
 package main
 
 import (
@@ -32,17 +19,11 @@ import (
 	"github.com/gordonklaus/portaudio"
 )
 
-// Sound represents a sound stream implementing the io.Reader interface
-// that provides the microphone data.
-
 type Sound struct {
 	stream *portaudio.Stream
 	data   []int16
 }
 
-//playsound helper function
-
-// Init initializes the Sound's PortAudio stream.
 func (s *Sound) Init() {
 	inputChannels := 1
 	outputChannels := 0
@@ -72,13 +53,11 @@ func (s *Sound) Init() {
 	s.stream = stream
 }
 
-// Close closes down the Sound's PortAudio connection.
 func (s *Sound) Close() {
 	s.stream.Close()
 	portaudio.Terminate()
 }
 
-// Read is the Sound's implementation of the io.Reader interface.
 func (s *Sound) Read(p []byte) (int, error) {
 	s.stream.Read()
 
@@ -91,7 +70,6 @@ func (s *Sound) Read(p []byte) (int, error) {
 	return len(p), nil
 }
 
-// Center Println helper function from https://play.golang.org/p/pxnJjZe6Bw
 func center(s string, w int) string {
 	return fmt.Sprintf("%[1]*s", -w, fmt.Sprintf("%[1]*s", (w+len(s))/2, s))
 }
@@ -205,5 +183,3 @@ func main() {
 	d.ReadAndDetect(mic)
 
 }
-
-// ./test  ./resources/common.res ./resources/models/snowboy.pmdl ./resources/models/alexa.pmdl ./resources/models/react.pmdl
