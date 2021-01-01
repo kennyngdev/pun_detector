@@ -196,7 +196,7 @@ func Train() {
 	//  PortAudio init and open stream
 	portaudio.Initialize()
 
-	//first run !!
+	//first run
 
 	stream1, err := portaudio.OpenDefaultStream(inputChannels, outputChannels, float64(sampleRate), len(framesPerBuffer), framesPerBuffer)
 	errCheck(err)
@@ -204,7 +204,6 @@ func Train() {
 	waveWriter1, err := wave.NewWriter(param1)
 	errCheck(err)
 
-	// rand.Seed(time.Now().UnixNano())
 	go func() {
 		key := C.getch()
 		fmt.Println()
@@ -230,7 +229,6 @@ func Train() {
 					errCheck(err)
 					waveWriter3, err := wave.NewWriter(param3)
 					errCheck(err)
-
 					//handler for ending recording
 					go func() {
 						key := C.getch()
@@ -243,7 +241,6 @@ func Train() {
 							stream3.Close()
 							portaudio.Terminate()
 							//POST request to snowboy API
-							//  python training_service.py ./user_recording/1_new.wav ./user_recording/2_new.wav ./user_recording/3_new.wav saved_model.pmdl
 							cmd := exec.Command("python", "training_service.py",
 								"./user_recording/1_new.wav", "./user_recording/2_new.wav",
 								"./user_recording/3_new.wav", modelName)
@@ -267,7 +264,6 @@ func Train() {
 							os.Exit(0)
 						}
 					}()
-
 					// start recording for 3rd file
 					errCheck(stream3.Start())
 					for {
@@ -280,7 +276,6 @@ func Train() {
 					errCheck(stream3.Stop())
 				}
 			}()
-
 			errCheck(stream2.Start())
 			for {
 				errCheck(stream2.Read())
@@ -304,13 +299,3 @@ func Train() {
 	errCheck(stream1.Stop())
 
 }
-
-// put this in:
-// t.AddWave(os.Args[3])
-// t.AddWave(os.Args[4])
-// t.AddWave(os.Args[5])
-// pmdl, err := t.Train()
-// if err != nil {
-// 	panic(err)
-// }
-// err = ioutil.WriteFile(t.Name+".pmdl", pmdl, 0644)
